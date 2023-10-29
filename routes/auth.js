@@ -21,10 +21,12 @@ router.post('/register', async (req, res) => {
   }
 });
 
+// router.get('/', (req, res) => {
+//   res.status(200).json('Wankadede');
+// });
+
 //Login
 router.post('/login', async (req, res) => {
-  // res.status(200).json('Works');
-  // return;
   try {
     const user = await User.findOne({ email: req.body.email });
     !user && res.status(401).json('Invalid email');
@@ -41,6 +43,9 @@ router.post('/login', async (req, res) => {
 
     originalPassword !== req.body.password &&
       res.status(401).json('Incorrect password');
+    if (originalPassword !== req.body.password) {
+      return;
+    }
 
     const accessToken = jwt.sign(
       {
@@ -52,7 +57,6 @@ router.post('/login', async (req, res) => {
     );
 
     const { password, ...details } = user._doc;
-
     res.status(200).json({ ...details, accessToken });
   } catch (err) {
     res.status(500).json(err);
