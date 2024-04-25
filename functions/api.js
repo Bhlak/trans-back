@@ -16,6 +16,14 @@ mongoose.connect(process.env.DB_CONN).then(() => {
 };
 
 app.use(express.json());
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  )
+  next()
+});
 app.use(cors());
 app.use(`${process.env.NTL_ROUTE}/auth`, authRoute);
 app.use(`${process.env.NTL_ROUTE}/products`, productRoute);
